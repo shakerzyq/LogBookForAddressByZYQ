@@ -12,7 +12,11 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 
 import domain.Address;
-
+/**
+ * 用户中心
+ * 获取位置,并显示
+ * 修改密码和显示地图的跳转
+ */
 public class UserCenterActivity extends AppCompatActivity {
 
     private LocationService locationService;
@@ -26,6 +30,7 @@ public class UserCenterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_center);
 
+        //接收传递的数据
         Bundle bundle = this.getIntent().getExtras();
         account = bundle.getString("account");
         //开启定位服务
@@ -58,19 +63,26 @@ public class UserCenterActivity extends AppCompatActivity {
             }
         });
 
+        //点击修改个人密码
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(UserCenterActivity.this,ChangePasswordActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("account",account);
+                intent1.putExtras(bundle);
+                startActivity(intent1);
+            }
+        });
+
     }
 
     BDAbstractLocationListener mListener = new BDAbstractLocationListener() {
-        public Address address = new Address();
-
         @Override
         public void onReceiveLocation(BDLocation location) {
             // TODO Auto-generated method stub
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                // button.setText("停止定位");
-
                 sb = new StringBuilder(256);
-
                 /**
                  * 时间也可以使用systemClock.elapsedRealtime()方法 获取的是自从开机以来，每次回调的时间；
                  * location.getTime() 是指服务端出本次结果的时间，如果位置不发生变化，则时间不变
@@ -86,11 +98,7 @@ public class UserCenterActivity extends AppCompatActivity {
                 sb.append(location.getDistrict());
 
                 textView1.setText(sb);
-
-
-
             }
-
         }
     };
 }

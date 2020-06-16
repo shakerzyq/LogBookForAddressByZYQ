@@ -48,6 +48,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import util.HttpUtil;
 
+/**
+ * 主界面,并有相应的功能
+ */
 public class HistoryActivity extends AppCompatActivity {
     private List<ArticleForFind> article ;
     private List<Address> addresses;
@@ -57,16 +60,8 @@ public class HistoryActivity extends AppCompatActivity {
     private String type;
     ListView listView;
     SimpleAdapter adapter;
-    int length=0;
-   // private String[] stype={"","","","","","","","","","","","",""};
-    //private String[] stype2=new String[length];
    private List<String> alist =new ArrayList<String>();
    private HashSet<String> set = new HashSet<String>();
-   //List<String> alist ;
-    //List<String> strList;
-    //List<String> arrayList;
-    private int MENU_DELETE;
-    private int MENU_SIGN;
     private String name;
     //用于查询的变量
     private String cardNumber;
@@ -97,9 +92,11 @@ public class HistoryActivity extends AppCompatActivity {
 
         Bundle bundle = this.getIntent().getExtras();
         account = bundle.getString("account");
-        //account="t4";
         spinner1 = findViewById(R.id.spinnerFind);
         spinner = findViewById(R.id.spinnerSe);
+
+        //登陆成功欢迎提示
+        Toast.makeText(getApplicationContext(),"欢迎回来:"+account,Toast.LENGTH_SHORT).show();
 
         listView = findViewById(R.id.listview1);
         ImageButton imageButton = findViewById(R.id.finding);
@@ -112,18 +109,10 @@ public class HistoryActivity extends AppCompatActivity {
                 selectType.setType(Logtype);
                 selectType.setAccount(account);
                 System.out.println("地址和类型"+cardNumber+Logtype);
-                //将对象封装成json数据
-                //map =new HashMap<String, Object>();
-               // adapter.notifyDataSetChanged();
-                //sendRequestWithOkHttp(true);
                 String gsons = gson.toJson(selectType);
                 requestBody = putJsonData(gsons);
                 url="http://10.0.2.2:8080/Logbook/SelectUpServlet";
-                Toast.makeText(HistoryActivity.this,"选择的类型为:"+cardNumber+Logtype,Toast.LENGTH_SHORT).show();
                 sendRequestWithOkHttpForSelectByAddressAndType();
-                //spinner.setSelection(location);
-
-
             }
         });
 
@@ -217,11 +206,6 @@ public class HistoryActivity extends AppCompatActivity {
         //使用轻量级的Gson解析得到的json
         Gson gson = new Gson();
         List<ArticleForFind> appList = gson.fromJson(jsonData, new TypeToken<List<ArticleForFind>>() {}.getType());
-        for (ArticleForFind app : appList) {
-            //控制台输出结果，便于查看
-            Log.d("MainActivity", "title" + app.getContent());
-            Log.d("MainActivity", "content" + app.getTitle());
-        }
         return appList;
     }
     private void showResponse(final List<ArticleForFind> response) {
@@ -229,11 +213,6 @@ public class HistoryActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-               // Looper.prepare();
-                // 在这里进行UI操作，将结果显示到界面上
-                //responseText.setText(response);
-                  //  Address address = new Address();
-              //  List<Map<String,Object>> listitem = new ArrayList<Map<String,Object>>();
                 for (int i=0;i<response.size();i++){
 
                     Map<String,Object> map = new HashMap<String, Object>();
@@ -257,6 +236,7 @@ public class HistoryActivity extends AppCompatActivity {
                     adapter1.add(lista.get(i));
                 }
 
+                //选择地点
                 spinner.setAdapter(adapter1);
                 spinner.setSelection(location);
                 spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -265,8 +245,6 @@ public class HistoryActivity extends AppCompatActivity {
                         cardNumber =lista.get(position);
 
                         location=position;
-                        Toast.makeText(HistoryActivity.this,cardNumber+"  "+position,Toast.LENGTH_LONG).show();
-                        //sendRequestWithOkHttp();
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
@@ -279,6 +257,7 @@ public class HistoryActivity extends AppCompatActivity {
                     adapter2.add(n);
                 }
 
+                //选择类型
                 spinner1.setAdapter(adapter2);
                 spinner1.setSelection(typeSite);
                 spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -287,9 +266,6 @@ public class HistoryActivity extends AppCompatActivity {
                         Logtype =typeList[position];
 
                         typeSite=position;
-                        //spinner1.setSelection(position);
-                        Toast.makeText(HistoryActivity.this,Logtype+"  "+position,Toast.LENGTH_LONG).show();
-                        //sendRequestWithOkHttp();
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
@@ -319,7 +295,6 @@ public class HistoryActivity extends AppCompatActivity {
                         }
                     });
                     registerForContextMenu(listView);
-               // Looper.loop();
                 }
 
 
@@ -337,14 +312,10 @@ public class HistoryActivity extends AppCompatActivity {
 
         });
     }
-    private void show(){
-
-    }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu,v, menuInfo);
         menu.add(0,1,0,"删除");
-        menu.add(0,2,0,"重点标记");
     }
 
     @SuppressLint("ShowToast")
@@ -409,33 +380,10 @@ public class HistoryActivity extends AppCompatActivity {
                         alertDialog.show();
                         adapter.notifyDataSetChanged();
                 break;
-            case 2:
-                Toast.makeText(this,"点击了gengxin",Toast.LENGTH_LONG);
-                break;
             default:
                 Toast.makeText(getBaseContext(),"wufanyin ",Toast.LENGTH_LONG);
                 return super.onContextItemSelected(item);
         }
-
         return true;
     }
-    private void sendRequestWithOkHttpD() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //在子线程中执行Http请求，并将最终的请求结果回调到okhttp3.Callback中
-                HttpUtil.sendOkHttpRequest(url,type,name,new okhttp3.Callback(){
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                    }
-                    @Override
-                    public void onFailure(Call call,IOException e){
-                        //在这里进行异常情况处理
-                    }
-                });
-            }
-        }).start();
-    }
-
-
 }

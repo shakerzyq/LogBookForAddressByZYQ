@@ -33,25 +33,26 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import util.HttpUtil;
 
+/**
+ * 登录
+ * 按钮: 1: 注册  2:登录
+ * 功能:点击登录后通过后台查询对账号和密码进行验证,如果密码或账号不符合将会弹出Toast提示
+ */
 public class LoginActivity extends AppCompatActivity {
     String account;
-    String password;
     public static Personal personal = new Personal();
     EditText editText;
     EditText editText1;
     Button button;
     private String url;
-    public String responseDatauser=null;
+    public String responseDatauser="";
     RequestBody requestBody ;
     Personal personal1 = new Personal("","","");
+    public static int i=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //Bundle bundle = this.getIntent().getExtras();
-        //account = bundle.getString("account");
-        //password = bundle.getString("password");
-        //Register3Activity.personal.getPassword();
 
         editText = findViewById(R.id.yonghu);
         editText1 = findViewById(R.id.password);
@@ -62,6 +63,9 @@ public class LoginActivity extends AppCompatActivity {
         editText1.addTextChangedListener(textWatcher);
         editText.setText(personal.getUserAccount());
         editText1.setText(personal.getPassword());
+        if(i>0){
+            Toast.makeText(LoginActivity.this,"用户名或密码不正确",Toast.LENGTH_SHORT).show();
+        }
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,88 +81,40 @@ public class LoginActivity extends AppCompatActivity {
                 personal.setUserAccount(editText.getText().toString());
                 personal.setPassword(editText1.getText().toString());
                 account=editText.getText().toString();
-                // System.out.println("信息"+article.getTitle()+article.getAddress());
                 if(!personal.getUserAccount().equals("")&&!personal.getPassword().equals("")) {
                     Gson gson = new Gson();
                     String json = gson.toJson(personal);
                     RequestBody requestBody = FormBody.create(MediaType.parse("application/json; charset=utf-8")
                             ,json);
-                    System.out.println("responsebody为" + requestBody);
                     httpUtil.sendOkHttpRequest("http://10.0.2.2:8080/Logbook/LoginServlet", requestBody,
                             new okhttp3.Callback() {
                                 @Override
                                 public void onFailure(Call call, IOException e) {
-
+                                    Toast.makeText(getApplicationContext(),"用户名或密码不正确",Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override
                                 public void onResponse(Call call, Response response) throws IOException {
                                     responseDatauser = response.body().string();
-                                            if (!responseDatauser.equals("{}")){
-                                               //personal=parseJSONWithGSON(responseData);
+                                            if (!responseDatauser.equals("")){
                                                 Intent intent1 = new Intent(LoginActivity.this,HistoryActivity.class);
                                                 Bundle bundle = new Bundle();
                                                 bundle.putString("account",account);
                                                 intent1.putExtras(bundle);
                                                 startActivity(intent1);
                                                 finish();
-                                                // Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
+                                            }else{
+                                                Intent intent1 = new Intent(LoginActivity.this,LoginActivity.class);
+                                                i++;
+                                                startActivity(intent1);
+                                                finish();
                                             }
-                                            }
+                                }
                             });
-                    if(responseDatauser==null){
 
-                            Toast.makeText(getApplicationContext(),"用户名或密码不正确",Toast.LENGTH_SHORT).show();
-                    }
                 }
             }
         });
-    }
-    private void sendRequestWithOkHttpForSelectByAddressAndType() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //在子线程中执行Http请求，并将最终的请求结果回调到okhttp3.Callback中
-                HttpUtil.sendOkHttpRequest1(url,requestBody,new okhttp3.Callback(){
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        //得到服务器返回的具体内容
-                        responseDatauser=response.body().string();
-                        personal1 = parseJSONWithGSON(responseDatauser);
-                        //显示UI界面，调用的showResponse方法
-
-                    }
-                    @Override
-                    public void onFailure(Call call,IOException e){
-                        //在这里进行异常情况处理
-                    }
-                });
-            }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String a=personal1.getUserName();
-                if (!personal1.getUserName().equals("")){
-                    Intent intent1 = new Intent(LoginActivity.this,HistoryActivity.class);
-                    startActivity(intent1);
-                    //Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
-                }else
-                {
-                    Toast.makeText(LoginActivity.this,"用户名密码不正确",Toast.LENGTH_SHORT).show();
-                }
-            }
-        }).start();
-
-
-    }
-
-    private Personal parseJSONWithGSON(String jsonData) {
-        //使用轻量级的Gson解析得到的json
-        Gson gson = new Gson();
-        Personal appList = gson.fromJson(jsonData, new TypeToken<List<ArticleForFind>>() {}.getType());
-
-        return appList;
     }
 
     TextWatcher textWatcher = new TextWatcher() {

@@ -61,7 +61,7 @@
         android:id="@+id/changinfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="修改信息"/>
+        android:text="修改密码"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="20dp"/>

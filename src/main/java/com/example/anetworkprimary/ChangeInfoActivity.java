@@ -7,6 +7,9 @@ import android.os.Bundle;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.MapView;
 
+/**
+ * 修改
+ */
 public class ChangeInfoActivity extends AppCompatActivity {
 
     private MapView mapView;//声明地图组件
@@ -14,10 +17,8 @@ public class ChangeInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        SDKInitializer.initialize(getApplicationContext());//初始化地图SDK
-       // setContentView(R.layout.activity_change_info);
         setContentView(R.layout.activity_change_info);
         mapView = findViewById(R.id.bmapview3);//获取地图组件
-        //mBaiduMap = mapView.getMap();
 
     }
     @Override
@@ -38,20 +39,4 @@ public class ChangeInfoActivity extends AppCompatActivity {
         super.onResume();
         mapView.onResume();
     }
-
-    /*@Override
-    protected void onStart() {
-        super.onStart();
-        //mBaiduMap.setMyLocationEnabled(true);//启动定位图层
-        mapView.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //mBaiduMap.setMyLocationEnabled(false);
-        mapView.onDestroy();
-        mapView=null;
-        //停止定位图层
-    }*/
 }

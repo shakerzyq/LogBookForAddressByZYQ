@@ -7,6 +7,9 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.location.LocationClientOption.LocationMode;
 
+/**
+ * 通过百度sdk获取定位信息的service
+ */
 public class LocationService {
     private LocationClient client = null;
     private LocationClientOption mOption,DIYoption;

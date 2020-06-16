@@ -13,8 +13,15 @@
         android:id="@+id/account"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:inputType="phone"
         android:hint="输入您的手机号"
 
+        />
+    <TextView
+        android:id="@+id/toast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#EF1010"
         />
     <TextView
         android:layout_width="match_parent"

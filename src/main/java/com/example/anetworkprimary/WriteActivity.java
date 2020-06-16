@@ -39,7 +39,9 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import util.HttpUtil;
-
+/**
+ * 添加记录,并有自动获取当前位置的功能
+ */
 public class WriteActivity extends AppCompatActivity {
 
 
@@ -134,12 +136,10 @@ public class WriteActivity extends AppCompatActivity {
                 HttpUtil httpUtil = new HttpUtil();
                 article.setTitle(editText1.getText().toString());
                 article.setContent(editText2.getText().toString());
-               // System.out.println("信息"+article.getTitle()+article.getAddress());
                 if(!article.getTitle().equals("")&&!article.getContent().equals("")) {
 
                     String json = toJson(article);
                     RequestBody requestBody = putJsonData(json);
-                    //Gson gson = new Gson();
                     System.out.println("responsebody为" + requestBody);
                     httpUtil.sendOkHttpRequest("http://10.0.2.2:8080/Logbook/TestServlet", requestBody,
                             new okhttp3.Callback() {
@@ -172,20 +172,11 @@ public class WriteActivity extends AppCompatActivity {
         locationService.stop(); //停止定位服务
     }
     BDAbstractLocationListener mListener = new BDAbstractLocationListener() {
-        public Address address = new Address();
-
         @Override
         public void onReceiveLocation(BDLocation location) {
             // TODO Auto-generated method stub
             if (null != location && location.getLocType() != BDLocation.TypeServerError) {
-                // button.setText("停止定位");
-
                 StringBuilder sb = new StringBuilder(256);
-
-                /**
-                 * 时间也可以使用systemClock.elapsedRealtime()方法 获取的是自从开机以来，每次回调的时间；
-                 * location.getTime() 是指服务端出本次结果的时间，如果位置不发生变化，则时间不变
-                 */
                 sb.append(location.getCountry());
 
                 sb.append(location.getProvince());
