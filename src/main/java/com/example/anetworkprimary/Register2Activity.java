@@ -9,9 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+/**
+ * 注册界面2
+ */
 public class Register2Activity extends AppCompatActivity {
-    String password;
-    String password2;
+    private String password;
+    private String password2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +31,10 @@ public class Register2Activity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Register2Activity.this,"账号为"+account,Toast.LENGTH_LONG).show();
                 password=editText.getText().toString();
                 password2=editText1.getText().toString();
-                if (!password.equals(password2)){
-                    Toast.makeText(Register2Activity.this,password2+"两次密码不一样"+password,Toast.LENGTH_SHORT).show();
+                if (!password.equals(password2)||password.equals("")){
+                    Toast.makeText(Register2Activity.this,"两次密码不一样",Toast.LENGTH_SHORT).show();
                 }else{
                     Intent intent = new Intent(Register2Activity.this,Register3Activity.class);
                     Bundle bundle1 = new Bundle();
@@ -42,10 +44,7 @@ public class Register2Activity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }
-
             }
         });
-
-
     }
 }

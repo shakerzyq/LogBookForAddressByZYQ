@@ -4,19 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import java.io.IOException;
-import java.util.List;
-
-import domain.ArticleForFind;
 import domain.Personal;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -26,12 +19,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import util.HttpUtil;
 
+/**
+ * 注册界面3
+ */
 public class Register3Activity extends AppCompatActivity {
 
     private RequestBody requestBody;
     private String url="http://10.0.2.2:8080/Logbook/RsgisterController";
     boolean result1=true;
-   //public static Personal personal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +43,9 @@ public class Register3Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String username = editText.getText().toString();
-                LoginActivity.personal = new Personal(account,password,username);
+                Personal personal = new Personal(account,password,username);
                 Gson gson = new Gson();
-                String gsons = gson.toJson(LoginActivity.personal);
+                String gsons = gson.toJson(personal);
                 requestBody = putJsonData(gsons);
                 getResult();
                 if (result1){
@@ -65,7 +60,6 @@ public class Register3Activity extends AppCompatActivity {
                 }else{
                     Toast.makeText(Register3Activity.this,"抱歉!系统异常,注册失败!",Toast.LENGTH_LONG).show();
                 }
-
             }
         });
     }
@@ -73,8 +67,6 @@ public class Register3Activity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                //在子线程中执行Http请求，并将最终的请求结果回调到okhttp3.Callback中
-
                 HttpUtil.sendOkHttpRequest1(url,requestBody,new Callback(){
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
@@ -93,21 +85,10 @@ public class Register3Activity extends AppCompatActivity {
             }
         }).start();
     }
-    //解析json
+    //封装成json
     private RequestBody putJsonData(String  gson){
         RequestBody requestBody = FormBody.create(MediaType.parse("application/json; charset=utf-8")
                 ,gson);
         return requestBody;
     }
-    /*private boolean parseJSONWithGSON(String jsonData) {
-        //使用轻量级的Gson解析得到的json
-        Gson gson = new Gson();
-        List<String> result = gson.fromJson(jsonData, new TypeToken<List<String>>() {}.getType());
-        if(result!=null){
-            return true;
-        }else {
-            return false;
-        }
-    }*/
-
 }

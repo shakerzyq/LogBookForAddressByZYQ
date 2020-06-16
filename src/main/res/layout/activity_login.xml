@@ -30,7 +30,7 @@
         android:layout_below="@+id/shangbiao"
         android:drawableLeft="@mipmap/username"
         android:layout_marginTop="20dp"
-        android:hint="手机号/QQ号/邮箱"
+        android:hint="账号"
         />
 
     <EditText
@@ -52,17 +52,6 @@
         android:text="没有账号？立即注册"
         android:layout_below="@+id/password"
         />
-    <!--第3步设置按钮的背景为StateListDrawable资源-->
-    <TextView
-        android:id="@+id/forgrt"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/password"
-        android:layout_alignParentRight="true"
-        android:gravity="right"
-        android:text="忘记密码？"
-        />
     <Button
         android:id="@+id/denglu"
         android:layout_marginTop="40dp"
@@ -74,12 +63,5 @@
         android:layout_below="@+id/password"
         android:enabled="false"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2017-2020@安旅by-rick "
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        />
 
 </RelativeLayout>

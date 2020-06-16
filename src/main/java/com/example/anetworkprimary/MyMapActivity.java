@@ -26,6 +26,9 @@ import com.baidu.mapapi.model.LatLng;
 
 import domain.Address;
 
+/**
+ * 显示地图
+ */
 public class MyMapActivity extends AppCompatActivity {
 
     private   double Latitude;
@@ -92,8 +95,6 @@ public class MyMapActivity extends AppCompatActivity {
                     }
                 }
         );
-        //Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);//获取最新定位信息
-        //从GPS获取最新的定位信息
         Location location=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         System.out.println("asd"+location);
         locationUpdates(location);//将最新的定位信息传递给locationUpdate()方法
@@ -102,8 +103,6 @@ public class MyMapActivity extends AppCompatActivity {
 
     public void locationUpdates(Location location){//获取指定的查询信息
         if (location!=null){
-            // StringBuilder stringBuilder=new StringBuilder();//创建一个字符串构建器,用于记录定位信息
-            //LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());//获取用户当前的经纬度
             LatLng ll = new LatLng(Latitude,Longitude);//获取用户当前的经纬度
             Log.i("Location","纬度:"+location.getLatitude()+"经度"+location.getLongitude());
             if (isFirstLoc){
@@ -114,8 +113,6 @@ public class MyMapActivity extends AppCompatActivity {
             //构造定位数据
             MyLocationData locationData = new MyLocationData.Builder().accuracy(location.getAccuracy())
                     .direction(100)//设置方向信息
-//                    .latitude(location.getLatitude())//设置纬度
-//                    .longitude(location.getLongitude())//设置经度
                     .latitude(Latitude)//设置纬度
                     .longitude(Longitude)//设置经度
                     .build();//构造一个定位数据

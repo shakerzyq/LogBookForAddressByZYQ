@@ -38,6 +38,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import util.HttpUtil;
 
+/**
+ * 显示内容,并且可以更新
+ */
 public class ShowActivity extends AppCompatActivity {
 
     private TextView mTextView;
@@ -83,22 +86,6 @@ public class ShowActivity extends AppCompatActivity {
         editText2.setText(content);
         mTextView.setText(address1);
 
-
-
-
-       /* spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                type=parent.getItemAtPosition(position).toString();
-                typeId=type;
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });*/
         /**
          * 退出操作
          */
@@ -138,13 +125,6 @@ public class ShowActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
-                //updateData.setAddress(mTextView.getText().toString());
-
-                //date =df.format(new Date());
-                //updateData.setTime(date);
-                //article.setType(typeId);
-                //System.out.println("地址为:"+article.getAddress());
                 HttpUtil httpUtil = new HttpUtil();
                 updateData.setTitle(editText1.getText().toString());
                 updateData.setContent(editText2.getText().toString());
@@ -180,29 +160,6 @@ public class ShowActivity extends AppCompatActivity {
             }
         });
     }
-   /* private void sendType(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                setType(type1);
-            }
-        }).start();;
-    }*/
-   /* private void setType(String type){
-
-        if (type=="其他"){
-            spinner.setSelection(0,true);
-        }else if (type=="生活"){
-            spinner.setSelection(1,true);
-        }else if (type=="学习"){
-            spinner.setSelection(2,true);
-        }else if (type=="工作"){
-            spinner.setSelection(3,true);
-        }
-    }*/
-
-
-
 
     private RequestBody  putJsonData(String  gson){
         RequestBody requestBody = FormBody.create(MediaType.parse("application/json; charset=utf-8")
@@ -212,10 +169,4 @@ public class ShowActivity extends AppCompatActivity {
     private String toJson(ActicleUpdate article){
         return gson.toJson(article);
     }
-    private void parseJSONWithGSON(String jsonData){
-        Gson gson = new Gson();
-        List<User> people = gson.fromJson(jsonData,new TypeToken<List<User>>(){}.getType());
-    }
-
-
 }
